@@ -6,7 +6,6 @@ import Navigation from './components/sections/Navigation.jsx'
 import HeroSection from './components/sections/HeroSection.jsx'
 import AboutSection from './components/sections/AboutSection.jsx'
 import BozonomicsSection from './components/sections/BozonomicsSection.jsx'
-import TeamSection from './components/sections/TeamSection.jsx'
 import GameSection from './components/sections/GameSection.jsx'
 import MemeGeneratorSection from './components/sections/MemeGeneratorSection.jsx'
 import FooterSection from './components/sections/FooterSection.jsx'
@@ -430,13 +429,6 @@ function App() {
 
       <BozonomicsSection 
         bozoThinking={bozoThinking}
-      />
-
-      <TeamSection 
-        bozoMain={bozoMain}
-        bozoDrooling={bozoDrooling}
-        bozoConfused={bozoConfused}
-        bozoHappy={bozoHappy}
       />
 
       <GameSection 
