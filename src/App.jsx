@@ -232,7 +232,7 @@ function App() {
         id: Date.now() + Math.random(),
         x: Math.random() * 460 + 20,
         y: -20,
-        speed: 2 + Math.random() * 3
+        speed: 1 + Math.random() * 2
       }
       setCoins(prev => [...prev, newCoin])
     }, 800)
