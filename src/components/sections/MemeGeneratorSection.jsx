@@ -164,10 +164,9 @@ export default function MemeGeneratorSection({
   <section id="meme-generator" className="py-16 px-4 bg-black/20">
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
-        <Palette className="w-12 h-12 text-blue-400 mx-auto mb-4" />
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Bozo Meme Generator</h2>
         <p className="text-lg text-blue-200 max-w-2xl mx-auto">
-          Create hilarious memes with our collection of Bozo expressions! Choose your favorite Bozo, add text, and share the laughs.
+          Create edgy sick memes with our collection of Bozos! Choose your favorite Bozo, add text, format, and share the memes.
         </p>
       </div>
 

@@ -24,23 +24,23 @@ const StatCard = memo(({ label, value, isPositive }) => (
 const ProgressBar = memo(({ percentage, milestones, maxMarketCap }) => (
   <div className="space-y-4">
     <div className="flex justify-between items-center">
-      <span className="text-blue-200">Grind to 3M (For now)</span>
+      <span className="text-blue-200">GRIND TO 3M (For now)</span>
       <span className="text-white font-bold transition-all duration-300">
         {percentage.toFixed(1)}%
       </span>
     </div>
     <div className="relative h-6 bg-gray-700 rounded-full overflow-hidden">
       <div 
-        className="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 transition-all duration-1000 ease-out relative"
+        className="h-full bg-gradient-to-r from-green-800 to-green-600 transition-all duration-1000 ease-out relative"
         style={{ width: `${percentage}%` }}
       >
-        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+        <div className="absolute inset-0 bg-white/40 animate-pulse"></div>
       </div>
       {/* Milestone markers */}
       {milestones.map((milestone, index) => (
         <div
           key={index}
-          className="absolute top-0 h-full w-1 bg-white/60"
+          className="absolute top-0 h-full w-1 bg-white"
           style={{ left: `${(milestone.value / maxMarketCap) * 100}%` }}
         >
           <div className="absolute -top-10 -left-4 flex justify-center">
@@ -57,7 +57,7 @@ const ProgressBar = memo(({ percentage, milestones, maxMarketCap }) => (
 ))
 
 const CurrentMilestone = memo(({ milestone }) => (
-  <div className="flex items-center justify-center space-x-4 bg-white/5 rounded-lg p-4">
+  <div className="bg-gradient-to-r from-blue-600 to-cyan-600 flex items-center justify-center space-x-4 bg-white/5 rounded-lg p-4">
     <img src={milestone.image} alt={milestone.title} className="w-16 h-16" />
     <div className="text-center">
       <h3 className="text-xl font-bold text-white mb-1 transition-all duration-300">
@@ -72,7 +72,7 @@ const NextMilestone = memo(({ milestone, marketCap, formatNumber }) => {
   if (!milestone) return null
   
   return (
-    <div className="text-center bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg p-4">
+    <div className="text-center bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg p-4">
       <h4 className="text-lg font-bold text-white mb-2 transition-all duration-300">
         Next Goal: {milestone.title} at {formatNumber(milestone.value)}
       </h4>
@@ -317,7 +317,7 @@ export default function AboutSection() {
 
         {/* Market Cap Tracker */}
         <div className="mb-12">
-          <Card className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-md border-white/20 text-white overflow-hidden">
+          <Card className="bg-gradient-to-r from-blue-800 to-blue-900 backdrop-blur-md border-white/60 text-white overflow-hidden">
             <CardHeader className="text-center pb-4">
               <div className="flex items-center justify-center space-x-2 mb-2">
                 <CardTitle className="text-3xl font-bold">Lock-In, BOZO</CardTitle>
@@ -378,9 +378,9 @@ export default function AboutSection() {
                   />
 
                   {/* Contract Info - Static */}
-                  <div className="text-center bg-white/5 rounded-lg p-3">
-                    <p className="text-xs text-blue-200 mb-1">Contract Address:</p>
-                    <p className="text-xs font-mono text-white break-all">{CONTRACT_ADDRESS}</p>
+                  <div className="text-center bg-white/10 rounded-lg p-3">
+                    <p className="text-m text-blue-400 mb-1">BOZO Contract Address:</p>
+                    <p className="text-m font-mono text-white break-all">{CONTRACT_ADDRESS}</p>
                   </div>
                 </div>
               )}
