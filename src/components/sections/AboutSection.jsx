@@ -24,7 +24,7 @@ const StatCard = memo(({ label, value, isPositive }) => (
 const ProgressBar = memo(({ percentage, milestones, maxMarketCap }) => (
   <div className="space-y-4">
     <div className="flex justify-between items-center">
-      <span className="text-blue-200">Progress to 3M</span>
+      <span className="text-blue-200">Grind to 3M (For now)</span>
       <span className="text-white font-bold transition-all duration-300">
         {percentage.toFixed(1)}%
       </span>
@@ -320,7 +320,7 @@ export default function AboutSection() {
           <Card className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-md border-white/20 text-white overflow-hidden">
             <CardHeader className="text-center pb-4">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <CardTitle className="text-3xl font-bold">Tap-In BOZO</CardTitle>
+                <CardTitle className="text-3xl font-bold">Lock-In, BOZO</CardTitle>
                 <TrendingUp className="w-8 h-8 text-blue-400" />
               </div>
             </CardHeader>

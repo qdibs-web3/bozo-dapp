@@ -26,7 +26,7 @@ export default function Navigation({
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <button onClick={() => scrollToSection('home')} className="text-white hover:text-blue-300 transition-colors">Home</button>
-            <button onClick={() => scrollToSection('about')} className="text-white hover:text-blue-300 transition-colors">About</button>
+            <button onClick={() => scrollToSection('about')} className="text-white hover:text-blue-300 transition-colors">$BOZO Stats</button>
             <button onClick={() => scrollToSection('tokenomics')} className="text-white hover:text-blue-300 transition-colors">Bozonomics</button>
             <button onClick={() => scrollToSection('game')} className="text-white hover:text-blue-300 transition-colors">Game</button>
             <button onClick={() => scrollToSection('meme-generator')} className="text-white hover:text-blue-300 transition-colors">Memes</button>
@@ -62,7 +62,7 @@ export default function Navigation({
         <div className="md:hidden bg-black/90 backdrop-blur-md">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <button onClick={() => scrollToSection('home')} className="block px-3 py-2 text-white hover:text-blue-300">Home</button>
-            <button onClick={() => scrollToSection('about')} className="block px-3 py-2 text-white hover:text-blue-300">About</button>
+            <button onClick={() => scrollToSection('about')} className="block px-3 py-2 text-white hover:text-blue-300">$BOZO Stats</button>
             <button onClick={() => scrollToSection('tokenomics')} className="block px-3 py-2 text-white hover:text-blue-300">Bozonomics</button>
             <button onClick={() => scrollToSection('game')} className="block px-3 py-2 text-white hover:text-blue-300">Game</button>
             <button onClick={() => scrollToSection('meme-generator')} className="block px-3 py-2 text-white hover:text-blue-300">Memes</button>
