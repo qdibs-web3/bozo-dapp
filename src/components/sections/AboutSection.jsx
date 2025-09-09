@@ -61,28 +61,13 @@ export default function AboutSection() {
     }
   ]
 
-  // Mock API call - replace with actual API
   const fetchMarketData = async () => {
     try {
-      setLoading(true)
-      
-      // Simulate API call with mock data for now
-      // In production, you'd call a real API like CoinGecko, DexScreener, or similar
-      const mockData = {
-        marketCap: Math.random() * 1500000 + 200000, // Random between 200k-1.7M
-        price: Math.random() * 0.01 + 0.001,
-        priceChange24h: (Math.random() - 0.5) * 20 // Random between -10% to +10%
-      }
-      
-      setMarketCap(mockData.marketCap)
-      setPrice(mockData.price)
-      setPriceChange24h(mockData.priceChange24h)
-      setError(null)
-    } catch (err) {
-      setError('Failed to fetch market data')
-      console.error('Market data fetch error:', err)
-    } finally {
-      setLoading(false)
+      const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
+      const data = await response.json()
+      // Process the response data
+    } catch (error) {
+      console.error('API Error:', error)
     }
   }
 
