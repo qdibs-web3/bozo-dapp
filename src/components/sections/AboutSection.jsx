@@ -149,7 +149,7 @@ export default function AboutSection() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <img src={bozoHappy} alt="Happy Bozo" className="w-32 h-32 mx-auto mb-6" />
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">About BOZO</h2>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Tap in BOZO</h2>
           <p className="text-xl text-blue-200 max-w-3xl mx-auto">
             You are either with $BOZO or against BOZO, CHOOSE WISELY!
           </p>
@@ -160,11 +160,9 @@ export default function AboutSection() {
           <Card className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-md border-white/20 text-white overflow-hidden">
             <CardHeader className="text-center pb-4">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <TrendingUp className="w-8 h-8 text-blue-400" />
-                <CardTitle className="text-3xl font-bold">BOZO Market Cap Tracker</CardTitle>
+                <CardTitle className="text-3xl font-bold">Enjoy the sauce but dont get lost</CardTitle>
                 <TrendingUp className="w-8 h-8 text-blue-400" />
               </div>
-              <p className="text-blue-200">Watch BOZO climb to the moon! 🚀</p>
             </CardHeader>
             <CardContent>
               {loading ? (
