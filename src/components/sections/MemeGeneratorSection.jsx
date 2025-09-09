@@ -316,7 +316,6 @@ export default function MemeGeneratorSection({
         <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center">
-              <Move className="w-4 h-4 mr-2" />
               Preview & Download
             </CardTitle>
           </CardHeader>
