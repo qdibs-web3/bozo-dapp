@@ -63,17 +63,42 @@ export default function AboutSection() {
 
   const fetchMarketData = async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      
       // Process the response data
+      if (data && data.pairs && data.pairs.length > 0) {
+        const pair = data.pairs[0]
+        
+        const currentPrice = parseFloat(pair.priceUsd) || 0
+        const marketCapValue = parseFloat(pair.marketCap) || 0
+        const priceChange = parseFloat(pair.priceChange?.h24) || 0
+        
+        setPrice(currentPrice)
+        setMarketCap(marketCapValue)
+        setPriceChange24h(priceChange)
+      } else {
+        // Fallback idfk???
+      }
+      
     } catch (error) {
-      console.error('API Error:', error)
+      setError(`Failed to fetch market data: ${error.message}`)
+    } finally {
+      setLoading(false) 
     }
   }
 
   useEffect(() => {
     fetchMarketData()
-    // Refresh every 30 seconds
+    // every 30 seconds
     const interval = setInterval(fetchMarketData, 30000)
     return () => clearInterval(interval)
   }, [])
@@ -88,6 +113,9 @@ export default function AboutSection() {
   }
 
   const formatPrice = (price) => {
+    if (price < 0.000001) {
+      return `$${price.toExponential(2)}` // For very small prices
+    }
     return `$${price.toFixed(6)}`
   }
 
