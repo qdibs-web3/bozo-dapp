@@ -14,7 +14,7 @@ export default function AboutSection() {
   const [price, setPrice] = useState(0)
   const [priceChange24h, setPriceChange24h] = useState(0)
 
-  const CONTRACT_ADDRESS = '0x20a825E12F1bA11947F32bef0950743783F02611'
+  const CONTRACT_ADDRESS = '0x658cDf527858974E85aDe6D3900640F109519A25'
   const MAX_MARKET_CAP = 3000000 // 3 million
 
   // Bozo-themed milestones
@@ -286,45 +286,6 @@ export default function AboutSection() {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Original About Cards */}
-        <div className="grid md:grid-cols-3 gap-8">
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-            <CardHeader>
-              <Users className="w-12 h-12 text-blue-400 mb-4" />
-              <CardTitle>Based Bozo</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-blue-200">
-                Built by the top B (Bozo), for the base meme community. Find your place within the BOZO ecosystem, Bozo.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-            <CardHeader>
-              <Rocket className="w-12 h-12 text-blue-400 mb-4" />
-              <CardTitle>Base Chain</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-blue-200">
-                Lightning fast transactions and minimal fees on Base network, the perfect home for BOZO to live. 
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 text-white">
-            <CardHeader>
-              <Trophy className="w-12 h-12 text-blue-400 mb-4" />
-              <CardTitle>Meme Supremacy</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-blue-200">
-                No other coin is as based as $BOZO on base. Send it to a million, create memes, game, yap, cult up, IT IS BOZO SEASON!
-              </p>
             </CardContent>
           </Card>
         </div>
