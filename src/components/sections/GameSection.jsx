@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Gamepad2, Trophy } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import bozoExcited from '../../assets/bozo_excited_new_no_bg.png'
 import bozoSleeping from '../../assets/bozo_sleeping_new_no_bg.png'
 import coinImage from '../../assets/coin.png'
@@ -23,8 +23,7 @@ export default function GameSection({
     <section id="game" className="py-20 px-4 bg-black/20">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <Gamepad2 className="w-16 h-16 text-blue-400 mx-auto mb-6" />
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Bozo Coin Catch!</h2>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Bozo Coin Catch</h2>
           <p className="text-xl text-blue-200 max-w-3xl mx-auto">
             Help Sad BOZO catch falling coins with his bucket! Catch as many coins as you can in 30 seconds, dont let BOZO down!
           </p>
@@ -139,7 +138,7 @@ export default function GameSection({
                 </p>
               )}
               <p className="mt-2 text-sm text-blue-300">
-                Use keys to move, BOZO
+                Use A & D or arrow keys to move, BOZO
               </p>
             </div>
           </CardContent>

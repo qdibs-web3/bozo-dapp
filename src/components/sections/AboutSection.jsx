@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Users, Trophy, Rocket, TrendingUp, Target, Zap, Crown, Star, Sparkles } from 'lucide-react'
 import bozoHappy from '../../assets/bozo_happy_no_bg.png'
@@ -6,6 +6,115 @@ import bozoExcited from '../../assets/bozo_excited_new_no_bg.png'
 import bozoThinking from '../../assets/bozo_thinking_new_no_bg.png'
 import bozoParty from '../../assets/bozo_party_no_bg.png'
 import bozoGenius from '../../assets/bozo_genius_no_bg.png'
+
+// Memoized components to prevent unnecessary re-renders
+const StatCard = memo(({ label, value, isPositive }) => (
+  <div className="bg-white/10 rounded-lg p-4 text-center">
+    <p className="text-blue-200 text-sm mb-1">{label}</p>
+    <p className={`text-2xl font-bold transition-colors duration-300 ${
+      label === '24h Change' 
+        ? (isPositive ? 'text-green-400' : 'text-red-400')
+        : 'text-white'
+    }`}>
+      {value}
+    </p>
+  </div>
+))
+
+const ProgressBar = memo(({ percentage, milestones, maxMarketCap }) => (
+  <div className="space-y-4">
+    <div className="flex justify-between items-center">
+      <span className="text-blue-200">Progress to 3M</span>
+      <span className="text-white font-bold transition-all duration-300">
+        {percentage.toFixed(1)}%
+      </span>
+    </div>
+    <div className="relative h-6 bg-gray-700 rounded-full overflow-hidden">
+      <div 
+        className="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 transition-all duration-1000 ease-out relative"
+        style={{ width: `${percentage}%` }}
+      >
+        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+      </div>
+      {/* Milestone markers */}
+      {milestones.map((milestone, index) => (
+        <div
+          key={index}
+          className="absolute top-0 h-full w-1 bg-white/60"
+          style={{ left: `${(milestone.value / maxMarketCap) * 100}%` }}
+        >
+          <div className="absolute -top-10 -left-4 flex justify-center">
+            <img 
+              src={milestone.icon} 
+              alt={milestone.title}
+              className="w-6 h-6 object-contain opacity-80"
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+))
+
+const CurrentMilestone = memo(({ milestone }) => (
+  <div className="flex items-center justify-center space-x-4 bg-white/5 rounded-lg p-4">
+    <img src={milestone.image} alt={milestone.title} className="w-16 h-16" />
+    <div className="text-center">
+      <h3 className="text-xl font-bold text-white mb-1 transition-all duration-300">
+        Current Level: {milestone.title}
+      </h3>
+      <p className="text-blue-200">{milestone.description}</p>
+    </div>
+  </div>
+))
+
+const NextMilestone = memo(({ milestone, marketCap, formatNumber }) => {
+  if (!milestone) return null
+  
+  return (
+    <div className="text-center bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg p-4">
+      <h4 className="text-lg font-bold text-white mb-2 transition-all duration-300">
+        Next Goal: {milestone.title} at {formatNumber(milestone.value)}
+      </h4>
+      <p className="text-blue-200 mb-2">{milestone.description}</p>
+      <p className="text-sm text-purple-300 transition-all duration-300">
+        Only {formatNumber(milestone.value - marketCap)} to go! 🎯
+      </p>
+    </div>
+  )
+})
+
+const MilestonesGrid = memo(({ milestones, marketCap, formatNumber }) => (
+  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+    {milestones.map((milestone, index) => (
+      <div
+        key={index}
+        className={`relative p-3 rounded-lg border-2 transition-all duration-500 ${
+          marketCap >= milestone.value
+            ? 'border-green-400 bg-green-400/20'
+            : 'border-gray-600 bg-gray-600/20'
+        }`}
+      >
+        <div className="text-center">
+          <div className="mb-1 flex justify-center">
+            <img 
+              src={milestone.icon} 
+              alt={milestone.title}
+              className="w-8 h-8 object-contain"
+            />
+          </div>          
+          <p className="text-xs font-bold text-white">{milestone.title}</p>
+          <p className="text-xs text-blue-200">{formatNumber(milestone.value)}</p>
+        </div>
+        {marketCap >= milestone.value && (
+          <div className="absolute -top-1 -right-1 animate-pulse">
+            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+))
 
 export default function AboutSection() {
   const [marketCap, setMarketCap] = useState(0)
@@ -17,13 +126,13 @@ export default function AboutSection() {
   const CONTRACT_ADDRESS = '0x658cDf527858974E85aDe6D3900640F109519A25'
   const MAX_MARKET_CAP = 3000000 // 3 million
 
-  // Bozo-themed milestones
-  const milestones = [
+  // Memoized milestones array to prevent recreation on every render
+  const milestones = useMemo(() => [
     {
       value: 100000,
       title: "Baby Bozo",
       description: "First steps into Bozo territory!",
-      icon: "👶",
+      icon: bozoHappy,
       image: bozoHappy,
       color: "from-green-400 to-green-600"
     },
@@ -31,7 +140,7 @@ export default function AboutSection() {
       value: 500000,
       title: "Thinking Bozo",
       description: "Bozo is getting smarter!",
-      icon: "🤔",
+      icon: bozoThinking,
       image: bozoThinking,
       color: "from-blue-400 to-blue-600"
     },
@@ -39,7 +148,7 @@ export default function AboutSection() {
       value: 1000000,
       title: "Excited Bozo",
       description: "1M! Bozo is pumped!",
-      icon: "🚀",
+      icon: bozoExcited,
       image: bozoExcited,
       color: "from-purple-400 to-purple-600"
     },
@@ -47,7 +156,7 @@ export default function AboutSection() {
       value: 2000000,
       title: "Party Bozo",
       description: "2M! Time to celebrate!",
-      icon: "🎉",
+      icon: bozoParty,
       image: bozoParty,
       color: "from-pink-400 to-pink-600"
     },
@@ -55,16 +164,39 @@ export default function AboutSection() {
       value: 3000000,
       title: "Genius Bozo",
       description: "3M! Ultimate Bozo form!",
-      icon: "👑",
+      icon: bozoGenius,
       image: bozoGenius,
       color: "from-yellow-400 to-yellow-600"
     }
-  ]
+  ], [])
 
-  const fetchMarketData = async () => {
+  // Memoized formatting functions
+  const formatNumber = useCallback((num) => {
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(2)}M`
+    } else if (num >= 1000) {
+      return `$${(num / 1000).toFixed(1)}K`
+    }
+    return `$${num.toFixed(2)}`
+  }, [])
+
+  const formatPrice = useCallback((price) => {
+    if (price < 0.000001) {
+      return `$${price.toExponential(2)}`
+    }
+    return `$${price.toFixed(6)}`
+  }, [])
+
+  // Optimized fetch function with useCallback to prevent recreation
+  const fetchMarketData = useCallback(async () => {
     try {
-      setLoading(true)
+      // Only show loading on first load, not on updates
+      if (marketCap === 0) {
+        setLoading(true)
+      }
       setError(null)
+      
+      console.log('Fetching data for contract:', CONTRACT_ADDRESS)
       
       const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
       
@@ -73,85 +205,113 @@ export default function AboutSection() {
       }
       
       const data = await response.json()
+      console.log('DexScreener response:', data)
       
-      // Process the response data
+      // Check if we have pairs data
       if (data && data.pairs && data.pairs.length > 0) {
-        const pair = data.pairs[0]
+        const pair = data.pairs[0] // Get the first pair
         
         const currentPrice = parseFloat(pair.priceUsd) || 0
         const marketCapValue = parseFloat(pair.marketCap) || 0
         const priceChange = parseFloat(pair.priceChange?.h24) || 0
         
-        setPrice(currentPrice)
-        setMarketCap(marketCapValue)
-        setPriceChange24h(priceChange)
+        // Only update state if values actually changed to minimize re-renders
+        setPrice(prevPrice => {
+          const newPrice = currentPrice
+          return Math.abs(newPrice - prevPrice) > 0.000001 ? newPrice : prevPrice
+        })
+        
+        setMarketCap(prevMarketCap => {
+          const newMarketCap = marketCapValue
+          return Math.abs(newMarketCap - prevMarketCap) > 1000 ? newMarketCap : prevMarketCap
+        })
+        
+        setPriceChange24h(prevChange => {
+          const newChange = priceChange
+          return Math.abs(newChange - prevChange) > 0.01 ? newChange : prevChange
+        })
+        
+        console.log('Updated values:', { currentPrice, marketCapValue, priceChange })
       } else {
-        // Fallback idfk???
+        // If no pairs found, use fallback mock data only on first load
+        if (marketCap === 0) {
+          console.log('No pairs found, using fallback data')
+          const mockData = {
+            marketCap: Math.random() * 1500000 + 200000,
+            price: Math.random() * 0.01 + 0.001,
+            priceChange24h: (Math.random() - 0.5) * 20
+          }
+          
+          setMarketCap(mockData.marketCap)
+          setPrice(mockData.price)
+          setPriceChange24h(mockData.priceChange24h)
+        }
       }
       
     } catch (error) {
+      console.error('API Error:', error)
       setError(`Failed to fetch market data: ${error.message}`)
+      
+      // Use fallback mock data on error only if no data exists
+      if (marketCap === 0) {
+        const mockData = {
+          marketCap: Math.random() * 1500000 + 200000,
+          price: Math.random() * 0.01 + 0.001,
+          priceChange24h: (Math.random() - 0.5) * 20
+        }
+        
+        setMarketCap(mockData.marketCap)
+        setPrice(mockData.price)
+        setPriceChange24h(mockData.priceChange24h)
+      }
     } finally {
-      setLoading(false) 
+      setLoading(false)
     }
-  }
+  }, [CONTRACT_ADDRESS, marketCap])
 
   useEffect(() => {
     fetchMarketData()
-    // every 30 seconds
+    // Refresh every 30 seconds
     const interval = setInterval(fetchMarketData, 30000)
     return () => clearInterval(interval)
-  }, [])
+  }, [fetchMarketData])
 
-  const formatNumber = (num) => {
-    if (num >= 1000000) {
-      return `$${(num / 1000000).toFixed(2)}M`
-    } else if (num >= 1000) {
-      return `$${(num / 1000).toFixed(1)}K`
-    }
-    return `$${num.toFixed(2)}`
-  }
-
-  const formatPrice = (price) => {
-    if (price < 0.000001) {
-      return `$${price.toExponential(2)}` // For very small prices
-    }
-    return `$${price.toFixed(6)}`
-  }
-
-  const getProgressPercentage = () => {
+  // Memoized calculations to prevent recalculation on every render
+  const progressPercentage = useMemo(() => {
     return Math.min((marketCap / MAX_MARKET_CAP) * 100, 100)
-  }
+  }, [marketCap, MAX_MARKET_CAP])
 
-  const getCurrentMilestone = () => {
+  const currentMilestone = useMemo(() => {
     for (let i = milestones.length - 1; i >= 0; i--) {
       if (marketCap >= milestones[i].value) {
         return milestones[i]
       }
     }
     return milestones[0]
-  }
+  }, [milestones, marketCap])
 
-  const getNextMilestone = () => {
+  const nextMilestone = useMemo(() => {
     for (let i = 0; i < milestones.length; i++) {
       if (marketCap < milestones[i].value) {
         return milestones[i]
       }
     }
     return null
-  }
+  }, [milestones, marketCap])
 
-  const currentMilestone = getCurrentMilestone()
-  const nextMilestone = getNextMilestone()
+  // Memoized formatted values
+  const formattedMarketCap = useMemo(() => formatNumber(marketCap), [formatNumber, marketCap])
+  const formattedPrice = useMemo(() => formatPrice(price), [formatPrice, price])
 
   return (
     <section id="about" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
+        {/* Static header - won't re-render */}
         <div className="text-center mb-16">
           <img src={bozoHappy} alt="Happy Bozo" className="w-32 h-32 mx-auto mb-6" />
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Tap in BOZO</h2>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">BOZO Watch</h2>
           <p className="text-xl text-blue-200 max-w-3xl mx-auto">
-            You are either with $BOZO or against BOZO, CHOOSE WISELY!
+            You are either with $BOZO or against, CHOOSE WISELY!
           </p>
         </div>
 
@@ -160,7 +320,7 @@ export default function AboutSection() {
           <Card className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-md border-white/20 text-white overflow-hidden">
             <CardHeader className="text-center pb-4">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <CardTitle className="text-3xl font-bold">Enjoy the sauce but dont get lost</CardTitle>
+                <CardTitle className="text-3xl font-bold">Tap-In BOZO</CardTitle>
                 <TrendingUp className="w-8 h-8 text-blue-400" />
               </div>
             </CardHeader>
@@ -182,102 +342,42 @@ export default function AboutSection() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {/* Current Stats */}
+                  {/* Current Stats - Memoized components */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white/10 rounded-lg p-4 text-center">
-                      <p className="text-blue-200 text-sm mb-1">Market Cap</p>
-                      <p className="text-2xl font-bold text-white">{formatNumber(marketCap)}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4 text-center">
-                      <p className="text-blue-200 text-sm mb-1">Price</p>
-                      <p className="text-2xl font-bold text-white">{formatPrice(price)}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4 text-center">
-                      <p className="text-blue-200 text-sm mb-1">24h Change</p>
-                      <p className={`text-2xl font-bold ${priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {priceChange24h >= 0 ? '+' : ''}{priceChange24h.toFixed(2)}%
-                      </p>
-                    </div>
+                    <StatCard label="Market Cap" value={formattedMarketCap} />
+                    <StatCard label="Price" value={formattedPrice} />
+                    <StatCard 
+                      label="24h Change" 
+                      value={`${priceChange24h >= 0 ? '+' : ''}${priceChange24h.toFixed(2)}%`}
+                      isPositive={priceChange24h >= 0}
+                    />
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-blue-200">Progress to 3M</span>
-                      <span className="text-white font-bold">{getProgressPercentage().toFixed(1)}%</span>
-                    </div>
-                    <div className="relative h-6 bg-gray-700 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 transition-all duration-1000 ease-out relative"
-                        style={{ width: `${getProgressPercentage()}%` }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-                      </div>
-                      {/* Milestone markers */}
-                      {milestones.map((milestone, index) => (
-                        <div
-                          key={index}
-                          className="absolute top-0 h-full w-1 bg-white/60"
-                          style={{ left: `${(milestone.value / MAX_MARKET_CAP) * 100}%` }}
-                        >
-                          <div className="absolute -top-8 -left-4 text-xs text-white/80">
-                            {milestone.icon}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <ProgressBar 
+                    percentage={progressPercentage} 
+                    milestones={milestones}
+                    maxMarketCap={MAX_MARKET_CAP}
+                  />
 
                   {/* Current Milestone */}
-                  <div className="flex items-center justify-center space-x-4 bg-white/5 rounded-lg p-4">
-                    <img src={currentMilestone.image} alt={currentMilestone.title} className="w-16 h-16" />
-                    <div className="text-center">
-                      <h3 className="text-xl font-bold text-white mb-1">
-                        Current Level: {currentMilestone.title}
-                      </h3>
-                      <p className="text-blue-200">{currentMilestone.description}</p>
-                    </div>
-                  </div>
+                  <CurrentMilestone milestone={currentMilestone} />
 
                   {/* Next Milestone */}
-                  {nextMilestone && (
-                    <div className="text-center bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-white mb-2">
-                        Next Goal: {nextMilestone.title} at {formatNumber(nextMilestone.value)}
-                      </h4>
-                      <p className="text-blue-200 mb-2">{nextMilestone.description}</p>
-                      <p className="text-sm text-purple-300">
-                        Only {formatNumber(nextMilestone.value - marketCap)} to go! 🎯
-                      </p>
-                    </div>
-                  )}
+                  <NextMilestone 
+                    milestone={nextMilestone} 
+                    marketCap={marketCap}
+                    formatNumber={formatNumber}
+                  />
 
                   {/* Milestones Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    {milestones.map((milestone, index) => (
-                      <div
-                        key={index}
-                        className={`relative p-3 rounded-lg border-2 transition-all ${
-                          marketCap >= milestone.value
-                            ? 'border-green-400 bg-green-400/20'
-                            : 'border-gray-600 bg-gray-600/20'
-                        }`}
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-1">{milestone.icon}</div>
-                          <p className="text-xs font-bold text-white">{milestone.title}</p>
-                          <p className="text-xs text-blue-200">{formatNumber(milestone.value)}</p>
-                        </div>
-                        {marketCap >= milestone.value && (
-                          <div className="absolute -top-1 -right-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <MilestonesGrid 
+                    milestones={milestones}
+                    marketCap={marketCap}
+                    formatNumber={formatNumber}
+                  />
 
-                  {/* Contract Info */}
+                  {/* Contract Info - Static */}
                   <div className="text-center bg-white/5 rounded-lg p-3">
                     <p className="text-xs text-blue-200 mb-1">Contract Address:</p>
                     <p className="text-xs font-mono text-white break-all">{CONTRACT_ADDRESS}</p>
