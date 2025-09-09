@@ -33,10 +33,10 @@ export default function Navigation({
             
             {isWalletConnected ? (
               <div className="flex items-center space-x-2">
-                <Badge className="bg-green-600 text-white h-10 px-4 flex items-center">
+                <Badge className="bg-blue-600 text-white h-10 px-4 flex items-center">
                   {formatAddress(walletAddress)}
                 </Badge>
-                <Button onClick={disconnectWallet} className="h-10 bg-red-600 hover:bg-red-700 text-white border-red-600">
+                <Button onClick={disconnectWallet} className="h-10 bg-blue-400 hover:bg-red-400 text-white border-red-600">
                   Disconnect
                 </Button>
               </div>
