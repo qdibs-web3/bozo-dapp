@@ -147,7 +147,7 @@ export default function HeroSection({ contractAddressCopied, copyContractAddress
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
-            onClick={() => window.open('https://app.uniswap.org/#/swap?outputCurrency=0x1234567890123456789012345678901234567890', '_blank')}
+            onClick={() => window.open('https://app.uniswap.org/explore/pools/base/0x5602cdccfe0b55461d8675645837149d832d1ce6', '_blank')}
           >
             <Rocket className="w-5 h-5 mr-2" />
             Swap $BOZO
@@ -155,7 +155,7 @@ export default function HeroSection({ contractAddressCopied, copyContractAddress
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
-            onClick={() => window.open('https://dexscreener.com/base/0x1234567890123456789012345678901234567890', '_blank')}
+            onClick={() => window.open('https://dexscreener.com/base/0x5602cdccfe0b55461d8675645837149d832d1ce6', '_blank')}
           >
             <ExternalLink className="w-5 h-5 mr-2" />
             View Chart
