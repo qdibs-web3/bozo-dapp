@@ -1,18 +1,10 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button.jsx'
-import { Badge } from '@/components/ui/badge.jsx'
-import { Menu, X, Wallet } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import bozoMain from '../../assets/bozo_no_bg.png'
 
 export default function Navigation({ 
   isMenuOpen, 
   setIsMenuOpen, 
-  isWalletConnected, 
-  walletAddress, 
-  connectWallet, 
-  disconnectWallet, 
-  scrollToSection,
-  formatAddress 
+  scrollToSection
 }) {
   return (
     <nav className="fixed top-0 w-full bg-black/20 backdrop-blur-md z-50 border-b border-white/10">
@@ -23,32 +15,45 @@ export default function Navigation({
             <span className="text-2xl font-bold text-white">BOZO</span>
           </div>
           
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <button onClick={() => scrollToSection('home')} className="text-white hover:text-blue-300 transition-colors">Home</button>
-            <button onClick={() => scrollToSection('about')} className="text-white hover:text-blue-300 transition-colors">$BOZO Stats</button>
-            <button onClick={() => scrollToSection('tokenomics')} className="text-white hover:text-blue-300 transition-colors">Bozonomics</button>
-            <button onClick={() => scrollToSection('game')} className="text-white hover:text-blue-300 transition-colors">Game</button>
-            <button onClick={() => scrollToSection('meme-generator')} className="text-white hover:text-blue-300 transition-colors">Memes</button>
-            
-            {isWalletConnected ? (
-              <div className="flex items-center space-x-2">
-                <Badge className="bg-blue-600 text-white h-10 px-4 flex items-center">
-                  {formatAddress(walletAddress)}
-                </Badge>
-                <Button onClick={disconnectWallet} className="h-10 bg-blue-400 hover:bg-red-400 text-white border-red-600">
-                  Disconnect
-                </Button>
-              </div>
-            ) : (
-              <Button onClick={connectWallet} className="bg-blue-600 hover:bg-blue-700">
-                <Wallet className="w-4 h-4 mr-2" />
-                Connect Wallet
-              </Button>
-            )}
+            <button 
+              onClick={() => scrollToSection('home')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              Home
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              $BOZO Stats
+            </button>
+            <button 
+              onClick={() => scrollToSection('tokenomics')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              Bozonomics
+            </button>
+            <button 
+              onClick={() => scrollToSection('my-bozo')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              My BOZO
+            </button>
+            <button 
+              onClick={() => scrollToSection('game')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              Game
+            </button>
+            <button 
+              onClick={() => scrollToSection('meme-generator')} 
+              className="text-white hover:text-blue-300 transition-colors font-medium"
+            >
+              Memes
+            </button>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white">
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -57,36 +62,48 @@ export default function Navigation({
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-black/90 backdrop-blur-md">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <button onClick={() => scrollToSection('home')} className="block px-3 py-2 text-white hover:text-blue-300">Home</button>
-            <button onClick={() => scrollToSection('about')} className="block px-3 py-2 text-white hover:text-blue-300">$BOZO Stats</button>
-            <button onClick={() => scrollToSection('tokenomics')} className="block px-3 py-2 text-white hover:text-blue-300">Bozonomics</button>
-            <button onClick={() => scrollToSection('game')} className="block px-3 py-2 text-white hover:text-blue-300">Game</button>
-            <button onClick={() => scrollToSection('meme-generator')} className="block px-3 py-2 text-white hover:text-blue-300">Memes</button>
-            <div className="px-3 py-2">
-              {isWalletConnected ? (
-                <div className="space-y-2">
-                  <Badge className="bg-green-600 text-white w-full justify-center">
-                    {formatAddress(walletAddress)}
-                  </Badge>
-                  <Button onClick={disconnectWallet} className="w-full" variant="outline">
-                    Disconnect
-                  </Button>
-                </div>
-              ) : (
-                <Button onClick={connectWallet} className="w-full bg-blue-600 hover:bg-blue-700">
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connect Wallet
-                </Button>
-              )}
-            </div>
+            <button 
+              onClick={() => scrollToSection('home')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              Home
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              $BOZO Stats
+            </button>
+            <button 
+              onClick={() => scrollToSection('tokenomics')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              Bozonomics
+            </button>
+            <button 
+              onClick={() => scrollToSection('my-bozo')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              My BOZO
+            </button>
+            <button 
+              onClick={() => scrollToSection('game')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              Game
+            </button>
+            <button 
+              onClick={() => scrollToSection('meme-generator')} 
+              className="block px-3 py-2 text-white hover:text-blue-300 w-full text-left font-medium"
+            >
+              Memes
+            </button>
           </div>
         </div>
       )}
     </nav>
   )
 }
-

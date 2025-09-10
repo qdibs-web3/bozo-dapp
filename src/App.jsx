@@ -6,6 +6,7 @@ import Navigation from './components/sections/Navigation.jsx'
 import HeroSection from './components/sections/HeroSection.jsx'
 import AboutSection from './components/sections/AboutSection.jsx'
 import BozonomicsSection from './components/sections/BozonomicsSection.jsx'
+import MyBozoSection from './components/sections/MyBozoSection.jsx'
 import GameSection from './components/sections/GameSection.jsx'
 import MemeGeneratorSection from './components/sections/MemeGeneratorSection.jsx'
 import FooterSection from './components/sections/FooterSection.jsx'
@@ -30,10 +31,6 @@ import coinImage from './assets/coin.png'
 function App() {
   // Navigation state
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  
-  // Wallet state
-  const [isWalletConnected, setIsWalletConnected] = useState(false)
-  const [walletAddress, setWalletAddress] = useState('')
   
   // Contract address copy state
   const [contractAddressCopied, setContractAddressCopied] = useState(false)
@@ -65,11 +62,6 @@ function App() {
   const [textShadow, setTextShadow] = useState(true)
   const [textOutline, setTextOutline] = useState(true)
   const canvasRef = useRef(null)
-
-  // Check if wallet is already connected on page load
-  useEffect(() => {
-    checkWalletConnection()
-  }, [])
 
   // Game physics
   useEffect(() => {
@@ -119,20 +111,6 @@ function App() {
     }
   }, [gameActive, bozoX, highScore])
 
-  const checkWalletConnection = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' })
-        if (accounts.length > 0) {
-          setIsWalletConnected(true)
-          setWalletAddress(accounts[0])
-        }
-      } catch (error) {
-        console.log('Error checking wallet connection:', error)
-      }
-    }
-  }
-
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -152,58 +130,6 @@ function App() {
     } catch (error) {
       console.log('Failed to copy contract address:', error)
     }
-  }
-
-  const connectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const accounts = await window.ethereum.request({ 
-          method: 'eth_requestAccounts' 
-        })
-        
-        if (accounts.length > 0) {
-          setIsWalletConnected(true)
-          setWalletAddress(accounts[0])
-          
-          try {
-            await window.ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x2105' }],
-            })
-          } catch (switchError) {
-            if (switchError.code === 4902) {
-              try {
-                await window.ethereum.request({
-                  method: 'wallet_addEthereumChain',
-                  params: [{
-                    chainId: '0x2105',
-                    chainName: 'Base',
-                    nativeCurrency: {
-                      name: 'Ethereum',
-                      symbol: 'ETH',
-                      decimals: 18,
-                    },
-                    rpcUrls: ['https://mainnet.base.org'],
-                    blockExplorerUrls: ['https://basescan.org'],
-                  }],
-                })
-              } catch (addError) {
-                console.log('Error adding Base network:', addError)
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.log('Error connecting wallet:', error)
-      }
-    } else {
-      alert('Please install MetaMask or another Web3 wallet to connect!')
-    }
-  }
-
-  const disconnectWallet = () => {
-    setIsWalletConnected(false)
-    setWalletAddress('')
   }
 
   const startGame = () => {
@@ -232,7 +158,7 @@ function App() {
         id: Date.now() + Math.random(),
         x: Math.random() * 460 + 20,
         y: -20,
-        speed: 1 + Math.random() * 2
+        speed: 1 + Math.random() * 2 // Slower coin fall speed
       }
       setCoins(prev => [...prev, newCoin])
     }, 800)
@@ -383,10 +309,6 @@ function App() {
     }
   }
 
-  const formatAddress = (address) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`
-  }
-
   const bozoImages = [
     { src: bozoMain, name: 'Classic Bozo' },
     { src: bozoDrooling, name: 'Drooling Bozo' },
@@ -405,81 +327,79 @@ function App() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+    <div className="min-h-screen">
       <Navigation 
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
-        isWalletConnected={isWalletConnected}
-        walletAddress={walletAddress}
-        connectWallet={connectWallet}
-        disconnectWallet={disconnectWallet}
         scrollToSection={scrollToSection}
-        formatAddress={formatAddress}
       />
 
       <HeroSection 
-        bozoExcited={bozoExcited}
         contractAddressCopied={contractAddressCopied}
         copyContractAddress={copyContractAddress}
       />
 
-      <AboutSection 
-        bozoHappy={bozoHappy}
-      />
+      {/* All sections below home get the appealing background */}
+      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+        <AboutSection 
+          bozoHappy={bozoHappy}
+        />
 
-      <BozonomicsSection 
-        bozoThinking={bozoThinking}
-      />
+        <BozonomicsSection 
+          bozoThinking={bozoThinking}
+        />
 
-      <GameSection 
-        gameScore={gameScore}
-        highScore={highScore}
-        gameActive={gameActive}
-        gameTimeLeft={gameTimeLeft}
-        coins={coins}
-        coinImage={coinImage}
-        bozoX={bozoX}
-        bozoExcited={bozoExcited}
-        gameRef={gameRef}
-        startGame={startGame}
-        moveBozoLeft={moveBozoLeft}
-        moveBozoRight={moveBozoRight}
-      />
+        <MyBozoSection />
 
-      <MemeGeneratorSection 
-        bozoImages={bozoImages}
-        selectedBozoImage={selectedBozoImage}
-        setSelectedBozoImage={setSelectedBozoImage}
-        memeText={memeText}
-        setMemeText={setMemeText}
-        memeBackground={memeBackground}
-        setMemeBackground={setMemeBackground}
-        isTransparentBackground={isTransparentBackground}
-        setIsTransparentBackground={setIsTransparentBackground}
-        memeRotation={memeRotation}
-        setMemeRotation={setMemeRotation}
-        memeScale={memeScale}
-        setMemeScale={setMemeScale}
-        textShadow={textShadow}
-        setTextShadow={setTextShadow}
-        textOutline={textOutline}
-        setTextOutline={setTextOutline}
-        selectedTextElement={selectedTextElement}
-        canvasRef={canvasRef}
-        handleCanvasMouseDown={handleCanvasMouseDown}
-        handleCanvasMouseMove={handleCanvasMouseMove}
-        handleCanvasMouseUp={handleCanvasMouseUp}
-        applyRandomEffect={applyRandomEffect}
-        resetMemeSettings={resetMemeSettings}
-        downloadMeme={downloadMeme}
-      />
+        <GameSection 
+          gameScore={gameScore}
+          highScore={highScore}
+          gameActive={gameActive}
+          gameTimeLeft={gameTimeLeft}
+          coins={coins}
+          coinImage={coinImage}
+          bozoX={bozoX}
+          bozoExcited={bozoExcited}
+          gameRef={gameRef}
+          startGame={startGame}
+          moveBozoLeft={moveBozoLeft}
+          moveBozoRight={moveBozoRight}
+        />
 
-      <FooterSection 
-        bozoMain={bozoMain}
-      />
+        <MemeGeneratorSection 
+          bozoImages={bozoImages}
+          selectedBozoImage={selectedBozoImage}
+          setSelectedBozoImage={setSelectedBozoImage}
+          memeText={memeText}
+          setMemeText={setMemeText}
+          memeBackground={memeBackground}
+          setMemeBackground={setMemeBackground}
+          isTransparentBackground={isTransparentBackground}
+          setIsTransparentBackground={setIsTransparentBackground}
+          memeRotation={memeRotation}
+          setMemeRotation={setMemeRotation}
+          memeScale={memeScale}
+          setMemeScale={setMemeScale}
+          textShadow={textShadow}
+          setTextShadow={setTextShadow}
+          textOutline={textOutline}
+          setTextOutline={setTextOutline}
+          selectedTextElement={selectedTextElement}
+          canvasRef={canvasRef}
+          handleCanvasMouseDown={handleCanvasMouseDown}
+          handleCanvasMouseMove={handleCanvasMouseMove}
+          handleCanvasMouseUp={handleCanvasMouseUp}
+          applyRandomEffect={applyRandomEffect}
+          resetMemeSettings={resetMemeSettings}
+          downloadMeme={downloadMeme}
+        />
+
+        <FooterSection 
+          bozoMain={bozoMain}
+        />
+      </div>
     </div>
   )
 }
 
 export default App
-
